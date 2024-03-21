@@ -1,0 +1,103 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id    String  @id @default(uuid())
+  email String  @unique
+  name  String?
+
+  lists List[]
+  tasks Task[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model List {
+  id    String @id @default(uuid())
+  title String @unique
+  order Int
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+  tasks  Task[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+enum STATUS {
+  IN_PROGRESS
+  COMPLETED
+  DELETED
+}
+
+enum PRIORITY {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+model Task {
+  id          String    @id @default(uuid())
+  title       String
+  description String?   @db.Text
+  status      STATUS    @default(IN_PROGRESS)
+  priority    PRIORITY  @default(MEDIUM)
+  dueDate     DateTime?
+  order       Int
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listId String
+  list   List   @relation(fields: [listId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, listId])
+}
+
+enum ACTION {
+  CREATE
+  RENAME
+  ADD_DESCRIPTION
+  CHANGE_DESCRIPTION
+  CHANGE_STATUS
+  CHANGE_PRIORITY
+  ADD_DUE_DATE
+  CHANGE_DUE_DATE
+  DELETE
+}
+
+enum ENTITY_TYPE {
+  LIST
+  TASK
+}
+
+model ActivityLog {
+  id          String      @id @default(uuid())
+  action      ACTION
+  entityType  ENTITY_TYPE
+  entityId    String
+  entityTitle String
+  userId      String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
