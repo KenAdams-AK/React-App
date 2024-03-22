@@ -1,27 +1,24 @@
 import { PrismaClient } from '@prisma/client';
 
-// initialize Prisma Client
 const prisma = new PrismaClient();
 
 async function main() {
-  // create users
   const user = await prisma.user.upsert({
     where: { email: 'user@mail.com' },
     update: {},
     create: {
-      name: 'User',
+      username: 'User',
       email: 'user@mail.com',
     },
   });
 
-  // create lists
   const list1 = await prisma.list.upsert({
     where: { title: 'List 1' },
     update: {},
     create: {
       title: 'List 1',
-      order: 1,
-      user: {
+      order: 100,
+      author: {
         connect: {
           id: user.id,
         },
@@ -35,8 +32,8 @@ async function main() {
             status: 'IN_PROGRESS',
             priority: 'LOW',
             dueDate: new Date(),
-            order: 1,
-            user: {
+            order: 100,
+            author: {
               connect: {
                 id: user.id,
               },
@@ -52,8 +49,8 @@ async function main() {
     update: {},
     create: {
       title: 'List 2',
-      order: 2,
-      user: {
+      order: 200,
+      author: {
         connect: {
           id: user.id,
         },
@@ -67,8 +64,8 @@ async function main() {
             status: 'COMPLETED',
             priority: 'HIGH',
             dueDate: new Date(),
-            order: 2,
-            user: {
+            order: 200,
+            author: {
               connect: {
                 id: user.id,
               },
@@ -79,7 +76,6 @@ async function main() {
     },
   });
 
-  // create activities log
   const activity = await prisma.activityLog.upsert({
     where: { id: 'some-unique-id' },
     update: {},
@@ -88,20 +84,18 @@ async function main() {
       entityType: 'TASK',
       entityId: 'some-unique-id',
       entityTitle: 'Task 1',
-      userId: user.id,
+      authorId: user.id,
     },
   });
 
   console.log({ user, list1, list2, activity });
 }
 
-// execute the main function
 main()
   .catch((e) => {
     console.error(e);
     process.exit(1);
   })
   .finally(async () => {
-    // close Prisma Client at the end
     await prisma.$disconnect();
   });

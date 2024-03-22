@@ -15,9 +15,9 @@ datasource db {
 }
 
 model User {
-  id    String  @id @default(uuid())
-  email String  @unique
-  name  String?
+  id       String @id @default(uuid())
+  username String @unique
+  email    String @unique
 
   lists List[]
   tasks Task[]
@@ -31,14 +31,14 @@ model List {
   title String @unique
   order Int
 
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
-  tasks  Task[]
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id])
+  tasks    Task[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([userId])
+  @@index([authorId])
 }
 
 enum STATUS {
@@ -62,15 +62,15 @@ model Task {
   dueDate     DateTime?
   order       Int
 
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  listId String
-  list   List   @relation(fields: [listId], references: [id], onDelete: Cascade)
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  listId   String
+  list     List   @relation(fields: [listId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([userId, listId])
+  @@index([authorId, listId])
 }
 
 enum ACTION {
@@ -96,8 +96,7 @@ model ActivityLog {
   entityType  ENTITY_TYPE
   entityId    String
   entityTitle String
-  userId      String
+  authorId    String
 
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
