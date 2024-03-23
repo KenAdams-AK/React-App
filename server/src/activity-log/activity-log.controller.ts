@@ -1,34 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { ActivityLogService } from './activity-log.service';
-import { CreateActivityLogDto } from './dto/create-activity-log.dto';
-import { UpdateActivityLogDto } from './dto/update-activity-log.dto';
+import { Controller, Get } from '@nestjs/common';
 
-@Controller('activity-log')
+import { ActivityLogResponse } from 'contracts';
+import { ActivityLogService } from './activity-log.service';
+
+@Controller('api/activity-log')
 export class ActivityLogController {
   constructor(private readonly activityLogService: ActivityLogService) {}
 
-  @Post()
-  create(@Body() createActivityLogDto: CreateActivityLogDto) {
-    return this.activityLogService.create(createActivityLogDto);
-  }
-
   @Get()
-  findAll() {
+  findAll(): Promise<ActivityLogResponse[]> {
     return this.activityLogService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.activityLogService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateActivityLogDto: UpdateActivityLogDto) {
-    return this.activityLogService.update(+id, updateActivityLogDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.activityLogService.remove(+id);
   }
 }

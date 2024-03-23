@@ -1,4 +1,4 @@
-import { PartialType } from '@nestjs/swagger';
-import { CreateTaskDto } from './create-task.dto';
+import { UpdateTaskRequestSchema } from 'contracts';
+import { createZodDto } from 'nestjs-zod';
 
-export class UpdateTaskDto extends PartialType(CreateTaskDto) {}
+export class UpdateTaskDto extends createZodDto(UpdateTaskRequestSchema) {}

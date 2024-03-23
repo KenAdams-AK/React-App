@@ -14,40 +14,67 @@ export class TaskListService {
     const list = await this.prisma.list.create({
       data: createTaskListDto,
     });
-    this.logger.log('Creating new taskList');
-    console.log({ list });
-
     const activityLog = await this.prisma.activityLog.create({
       data: {
         action: 'CREATE',
         entityType: 'LIST',
-        entityId: list.id,
-        entityTitle: list.title,
-        authorId: list.authorId,
+        listId: list.id,
+        authorId: createTaskListDto.authorId,
       },
     });
+    this.logger.log('Creating new taskList');
+    console.log({ list, activityLog });
 
-    return { ...list, activityLog };
+    return list;
   }
 
   findAll() {
-    return this.prisma.list.findMany();
-  }
-
-  findOne(id: string) {
-    this.logger.log(`Finding taskList with id: ${id}`);
-    return this.prisma.list.findUnique({
-      where: {
-        id,
+    const lists = this.prisma.list.findMany({
+      orderBy: [{ order: 'asc' }, { createdAt: 'desc' }],
+      include: {
+        tasks: {
+          orderBy: [{ order: 'asc' }, { createdAt: 'desc' }],
+          select: {
+            id: true,
+            title: true,
+            description: true,
+            priority: true,
+            dueDate: true,
+            order: true,
+            createdAt: true,
+            updatedAt: true,
+          },
+        },
       },
     });
+
+    return lists;
   }
 
-  update(id: string, updateTaskListDto: UpdateTaskListDto) {
-    return `This action updates a #${id} taskList`;
+  async update(id: string, updateTaskListDto: UpdateTaskListDto) {
+    const list = await this.prisma.list.update({
+      where: { id },
+      data: updateTaskListDto,
+    });
+    const activityLog = await this.prisma.activityLog.create({
+      data: {
+        action: 'RENAME',
+        entityType: 'LIST',
+        listId: id,
+        authorId: updateTaskListDto.authorId,
+      },
+    });
+    this.logger.log('Updating taskList');
+    console.log({ list, activityLog });
+
+    return list;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} taskList`;
+  remove(id: string) {
+    const list = this.prisma.list.delete({
+      where: { id },
+    });
+
+    return list;
   }
 }

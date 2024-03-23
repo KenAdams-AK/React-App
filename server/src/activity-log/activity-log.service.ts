@@ -1,26 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import { CreateActivityLogDto } from './dto/create-activity-log.dto';
-import { UpdateActivityLogDto } from './dto/update-activity-log.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class ActivityLogService {
-  create(createActivityLogDto: CreateActivityLogDto) {
-    return 'This action adds a new activityLog';
-  }
+  constructor(private prisma: PrismaService) {}
 
   findAll() {
-    return `This action returns all activityLog`;
-  }
+    const activityLog = this.prisma.activityLog.findMany({
+      orderBy: { createdAt: 'desc' },
+      include: {
+        task: true,
+        list: true,
+      },
+    });
 
-  findOne(id: number) {
-    return `This action returns a #${id} activityLog`;
-  }
-
-  update(id: number, updateActivityLogDto: UpdateActivityLogDto) {
-    return `This action updates a #${id} activityLog`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} activityLog`;
+    return activityLog;
   }
 }
