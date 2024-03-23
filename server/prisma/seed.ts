@@ -23,24 +23,6 @@ async function main() {
           id: user.id,
         },
       },
-      tasks: {
-        connectOrCreate: {
-          where: { id: 'some-unique-id' },
-          create: {
-            title: 'Task 1',
-            description: "Task 1's description",
-            status: 'IN_PROGRESS',
-            priority: 'LOW',
-            dueDate: new Date(),
-            order: 100,
-            author: {
-              connect: {
-                id: user.id,
-              },
-            },
-          },
-        },
-      },
     },
   });
 
@@ -55,40 +37,110 @@ async function main() {
           id: user.id,
         },
       },
-      tasks: {
-        connectOrCreate: {
-          where: { id: 'some-unique-id' },
-          create: {
-            title: 'Task 2',
-            description: "Task 2's description",
-            status: 'COMPLETED',
-            priority: 'HIGH',
-            dueDate: new Date(),
-            order: 200,
-            author: {
-              connect: {
-                id: user.id,
-              },
-            },
-          },
+    },
+  });
+
+  const task1 = await prisma.task.upsert({
+    where: { id: 'some-unique' },
+    update: {},
+    create: {
+      title: 'Task 1',
+      description: "Task 1's description",
+      status: 'IN_PROGRESS',
+      priority: 'LOW',
+      dueDate: new Date(),
+      order: 100,
+      author: {
+        connect: {
+          id: user.id,
+        },
+      },
+      list: {
+        connect: {
+          id: list1.id,
         },
       },
     },
   });
 
-  const activity = await prisma.activityLog.upsert({
-    where: { id: 'some-unique-id' },
+  const task2 = await prisma.task.upsert({
+    where: { id: 'some-unique' },
+    update: {},
+    create: {
+      title: 'Task 2',
+      description: "Task 2's description",
+      status: 'COMPLETED',
+      priority: 'HIGH',
+      dueDate: new Date(),
+      order: 200,
+      author: {
+        connect: {
+          id: user.id,
+        },
+      },
+      list: {
+        connect: {
+          id: list2.id,
+        },
+      },
+    },
+  });
+
+  const activityList1 = await prisma.activityLog.upsert({
+    where: { id: 'some-unique' },
+    update: {},
+    create: {
+      action: 'CREATE',
+      entityType: 'LIST',
+      authorId: user.id,
+      listId: list1.id,
+    },
+  });
+
+  const activityList2 = await prisma.activityLog.upsert({
+    where: { id: 'some-unique' },
+    update: {},
+    create: {
+      action: 'CREATE',
+      entityType: 'LIST',
+      authorId: user.id,
+      listId: list2.id,
+    },
+  });
+
+  const activityTask1 = await prisma.activityLog.upsert({
+    where: { id: 'some-unique' },
     update: {},
     create: {
       action: 'CREATE',
       entityType: 'TASK',
-      entityId: 'some-unique-id',
-      entityTitle: 'Task 1',
       authorId: user.id,
+      taskId: task1.id,
     },
   });
 
-  console.log({ user, list1, list2, activity });
+  const activityTask2 = await prisma.activityLog.upsert({
+    where: { id: 'some-unique' },
+    update: {},
+    create: {
+      action: 'CREATE',
+      entityType: 'TASK',
+      authorId: user.id,
+      taskId: task2.id,
+    },
+  });
+
+  console.log({
+    user,
+    list1,
+    list2,
+    task1,
+    task2,
+    activityList1,
+    activityList2,
+    activityTask1,
+    activityTask2,
+  });
 }
 
 main()

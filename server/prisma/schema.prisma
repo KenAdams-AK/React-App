@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider      = "prisma-client-js"
   binaryTargets = ["native", "debian-openssl-3.0.x"]
@@ -19,8 +13,9 @@ model User {
   username String @unique
   email    String @unique
 
-  lists List[]
-  tasks Task[]
+  lists       List[]
+  tasks       Task[]
+  activityLog ActivityLog[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -29,11 +24,12 @@ model User {
 model List {
   id    String @id @default(uuid())
   title String @unique
-  order Int
+  order Int    @default(0)
 
-  authorId String
-  author   User   @relation(fields: [authorId], references: [id])
-  tasks    Task[]
+  authorId    String
+  author      User          @relation(fields: [authorId], references: [id])
+  tasks       Task[]
+  activityLog ActivityLog[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -60,12 +56,13 @@ model Task {
   status      STATUS    @default(IN_PROGRESS)
   priority    PRIORITY  @default(MEDIUM)
   dueDate     DateTime?
-  order       Int
+  order       Int       @default(0)
 
-  authorId String
-  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  listId   String
-  list     List   @relation(fields: [listId], references: [id], onDelete: Cascade)
+  authorId    String
+  author      User          @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  listId      String
+  list        List          @relation(fields: [listId], references: [id], onDelete: Cascade)
+  activityLog ActivityLog[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -91,12 +88,19 @@ enum ENTITY_TYPE {
 }
 
 model ActivityLog {
-  id          String      @id @default(uuid())
-  action      ACTION
-  entityType  ENTITY_TYPE
-  entityId    String
-  entityTitle String
-  authorId    String
+  id         String      @id @default(uuid())
+  action     ACTION
+  entityType ENTITY_TYPE
+
+  authorId String
+  author   User    @relation(fields: [authorId], references: [id])
+  taskId   String?
+  task     Task?   @relation(fields: [taskId], references: [id])
+  listId   String?
+  list     List?   @relation(fields: [listId], references: [id])
 
   createdAt DateTime @default(now())
+
+  @@index([authorId, taskId])
+  @@index([authorId, listId])
 }

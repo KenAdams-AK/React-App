@@ -35,7 +35,7 @@ const ActivityLogResponse = z.object({
   entityId: z.string(),
   entityTitle: z.string(),
   authorId: z.string(),
-  createdAt: z.string(),
+  createdAt: z.date(),
 });
 
 type CreateActivityLog = z.infer<typeof CreateActivityLog>;

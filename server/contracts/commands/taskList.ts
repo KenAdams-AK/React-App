@@ -1,23 +1,23 @@
 import { Prisma } from '@prisma/client';
 import { z } from 'zod';
+import { ActivityLogResponse } from './activityLog';
 
 const CreateTaskListRequestSchema = z.object({
-  title: z.string().min(1).max(255),
+  title: z.string().min(3).max(255),
   authorId: z.string(),
-  order: z.number(), // TODO: Make this optional or set default value in Prisma schema
 }) satisfies z.Schema<Prisma.ListUncheckedCreateInput>;
 
 const UpdateTaskListRequestSchema = z.object({
-  id: z.string(),
-  title: z.string().min(1).max(255),
+  title: z.string().min(3).max(255),
   authorId: z.string(),
-});
+}) satisfies z.Schema<Prisma.ListUncheckedUpdateInput>;
 
 const TaskListResponseSchema = z.object({
   id: z.string(),
   title: z.string(),
   authorId: z.string(),
   order: z.number(),
+  activityLog: ActivityLogResponse,
   createdAt: z.date(),
   updatedAt: z.date(),
 });

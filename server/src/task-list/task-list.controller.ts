@@ -3,16 +3,16 @@ import {
   Get,
   Post,
   Body,
-  // Patch,
+  Patch,
   Param,
   Delete,
   UsePipes,
 } from '@nestjs/common';
 import { TaskListService } from './task-list.service';
 import { CreateTaskListDto } from './dto/create-task-list.dto';
-// import { UpdateTaskListDto } from './dto/update-task-list.dto';
 import { TaskListResponse } from 'contracts';
 import { ZodValidationPipe } from 'nestjs-zod';
+import { UpdateTaskListDto } from './dto/update-task-list.dto';
 
 @UsePipes(ZodValidationPipe)
 @Controller('api/task-lists')
@@ -36,13 +36,13 @@ export class TaskListController {
     return this.taskListService.findOne(id);
   }
 
-  // @Patch(':id')
-  // update(
-  //   @Param('id') id: string,
-  //   @Body() updateTaskListDto: UpdateTaskListDto,
-  // ) {
-  //   return this.taskListService.update(+id, updateTaskListDto);
-  // }
+  @Patch(':id')
+  update(
+    @Param('id') id: string,
+    @Body() updateTaskListDto: UpdateTaskListDto,
+  ) {
+    return this.taskListService.update(id, updateTaskListDto);
+  }
 
   @Delete(':id')
   remove(@Param('id') id: string) {

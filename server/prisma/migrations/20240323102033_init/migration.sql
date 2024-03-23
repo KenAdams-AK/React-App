@@ -25,7 +25,7 @@ CREATE TABLE "User" (
 CREATE TABLE "List" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
-    "order" INTEGER NOT NULL,
+    "order" INTEGER NOT NULL DEFAULT 0,
     "authorId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -41,7 +41,7 @@ CREATE TABLE "Task" (
     "status" "STATUS" NOT NULL DEFAULT 'IN_PROGRESS',
     "priority" "PRIORITY" NOT NULL DEFAULT 'MEDIUM',
     "dueDate" TIMESTAMP(3),
-    "order" INTEGER NOT NULL,
+    "order" INTEGER NOT NULL DEFAULT 0,
     "authorId" TEXT NOT NULL,
     "listId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -55,9 +55,9 @@ CREATE TABLE "ActivityLog" (
     "id" TEXT NOT NULL,
     "action" "ACTION" NOT NULL,
     "entityType" "ENTITY_TYPE" NOT NULL,
-    "entityId" TEXT NOT NULL,
-    "entityTitle" TEXT NOT NULL,
     "authorId" TEXT NOT NULL,
+    "taskId" TEXT,
+    "listId" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "ActivityLog_pkey" PRIMARY KEY ("id")
@@ -78,6 +78,12 @@ CREATE INDEX "List_authorId_idx" ON "List"("authorId");
 -- CreateIndex
 CREATE INDEX "Task_authorId_listId_idx" ON "Task"("authorId", "listId");
 
+-- CreateIndex
+CREATE INDEX "ActivityLog_authorId_taskId_idx" ON "ActivityLog"("authorId", "taskId");
+
+-- CreateIndex
+CREATE INDEX "ActivityLog_authorId_listId_idx" ON "ActivityLog"("authorId", "listId");
+
 -- AddForeignKey
 ALTER TABLE "List" ADD CONSTRAINT "List_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
@@ -86,3 +92,12 @@ ALTER TABLE "Task" ADD CONSTRAINT "Task_authorId_fkey" FOREIGN KEY ("authorId") 
 
 -- AddForeignKey
 ALTER TABLE "Task" ADD CONSTRAINT "Task_listId_fkey" FOREIGN KEY ("listId") REFERENCES "List"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ActivityLog" ADD CONSTRAINT "ActivityLog_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ActivityLog" ADD CONSTRAINT "ActivityLog_taskId_fkey" FOREIGN KEY ("taskId") REFERENCES "Task"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ActivityLog" ADD CONSTRAINT "ActivityLog_listId_fkey" FOREIGN KEY ("listId") REFERENCES "List"("id") ON DELETE SET NULL ON UPDATE CASCADE;
