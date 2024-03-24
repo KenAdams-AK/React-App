@@ -15,7 +15,7 @@
     "db:down": "docker-compose down",
     "db:init": "npm run db:up && sleep 1 && npm run prisma:migrate",
     "db:rm": "docker-compose rm -s -v",
-    "db:restart": "npm run db:rm && npm run db:up && sleep 1 && npm run prisma:deploy && npm run prisma:seed",
+    "db:restart": "npm run db:rm && npm run db:up && sleep 1 && npm run prisma:deploy",
     "prisma:migrate": "prisma migrate dev",
     "prisma:deploy": "prisma migrate deploy",
     "prisma:seed": "prisma db seed",

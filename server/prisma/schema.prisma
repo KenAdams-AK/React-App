@@ -73,6 +73,7 @@ model Task {
 enum ACTION {
   CREATE
   RENAME
+  MOVE
   ADD_DESCRIPTION
   CHANGE_DESCRIPTION
   CHANGE_STATUS
@@ -89,8 +90,10 @@ enum ENTITY_TYPE {
 
 model ActivityLog {
   id         String      @id @default(uuid())
-  action     ACTION
   entityType ENTITY_TYPE
+  action     ACTION
+  prevValue  String?
+  newValue   String?
 
   authorId String
   author   User    @relation(fields: [authorId], references: [id])

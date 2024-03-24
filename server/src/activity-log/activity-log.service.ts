@@ -9,6 +9,7 @@ export class ActivityLogService {
     const activityLog = this.prisma.activityLog.findMany({
       orderBy: { createdAt: 'desc' },
       include: {
+        author: true,
         task: true,
         list: true,
       },

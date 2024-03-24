@@ -19,7 +19,7 @@ export class TaskListService {
         action: 'CREATE',
         entityType: 'LIST',
         listId: list.id,
-        authorId: createTaskListDto.authorId,
+        authorId: list.authorId,
       },
     });
     this.logger.log('Creating new taskList');
@@ -52,22 +52,27 @@ export class TaskListService {
   }
 
   async update(id: string, updateTaskListDto: UpdateTaskListDto) {
-    const list = await this.prisma.list.update({
+    const list = await this.prisma.list.findUniqueOrThrow({
+      where: { id },
+    });
+    const updatedList = await this.prisma.list.update({
       where: { id },
       data: updateTaskListDto,
     });
     const activityLog = await this.prisma.activityLog.create({
       data: {
-        action: 'RENAME',
         entityType: 'LIST',
-        listId: id,
-        authorId: updateTaskListDto.authorId,
+        action: 'RENAME',
+        prevValue: list.title,
+        newValue: updatedList.title,
+        listId: updatedList.id,
+        authorId: updatedList.authorId,
       },
     });
     this.logger.log('Updating taskList');
-    console.log({ list, activityLog });
+    console.log({ updatedList, activityLog });
 
-    return list;
+    return updatedList;
   }
 
   remove(id: string) {
