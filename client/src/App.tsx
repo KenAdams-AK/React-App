@@ -1,25 +1,35 @@
-import { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "./redux/store";
 
-import { UserResponse } from "../../server/contracts/index";
+import { Button } from "./components/Button";
+import { fetchUserThunk } from "./redux/reducers/user/userSlice";
+import { useEffect } from "react";
 
 function App() {
-  const [user, setUser] = useState<UserResponse | null>(null);
+  // TODO: add useLocalStorage hook
+  const dispatch = useAppDispatch();
+  const { user } = useAppSelector((state) => state.user);
+
+  console.log({ user });
 
   useEffect(() => {
-    fetch("/api/users")
-      .then((res) => res.json())
-      .then((data) => {
-        console.log({ data });
-        setUser(data);
-      })
-      .catch((error) => console.log("[FETCH_ERROR]", error));
+    if (user) return;
+    const promise = dispatch(fetchUserThunk());
+
+    return () => {
+      promise.abort();
+    };
   }, []);
 
   if (!user) {
     return <h1>Loading...</h1>;
   }
 
-  return <h1>Welcome to Task Board, {user.username}!</h1>;
+  return (
+    <main>
+      <h1>Welcome to Task Board, {user.username}!</h1>
+      <Button />
+    </main>
+  );
 }
 
 export default App;
