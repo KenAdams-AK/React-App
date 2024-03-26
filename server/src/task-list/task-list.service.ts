@@ -16,8 +16,8 @@ export class TaskListService {
     });
     const activityLog = await this.prisma.activityLog.create({
       data: {
-        action: 'CREATE',
         entityType: 'LIST',
+        action: 'CREATE',
         listId: list.id,
         authorId: list.authorId,
       },
@@ -75,10 +75,20 @@ export class TaskListService {
     return updatedList;
   }
 
-  remove(id: string) {
-    const list = this.prisma.list.delete({
+  async remove(id: string) {
+    const list = await this.prisma.list.delete({
       where: { id },
     });
+    const activityLog = await this.prisma.activityLog.create({
+      data: {
+        entityType: 'LIST',
+        action: 'DELETE',
+        listId: id,
+        authorId: list.authorId,
+      },
+    });
+    this.logger.log('Deleting taskList');
+    console.log({ list, activityLog });
 
     return list;
   }

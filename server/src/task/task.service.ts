@@ -51,6 +51,7 @@ export class TaskService {
       data: updateTaskDto,
     });
 
+    // TODO: Refactor to separate helper function
     for (const [key, value] of Object.entries(updatedTask)) {
       switch (key) {
         case 'title':
@@ -146,6 +147,24 @@ export class TaskService {
             },
           });
           break;
+
+        case 'listId':
+          if (prevTask.listId === value) break;
+          await this.prisma.activityLog.create({
+            data: {
+              entityType: 'TASK',
+              action: 'MOVE',
+              taskId: id,
+              authorId: updatedTask.authorId,
+              prevValue: prevTask.listId,
+              newValue: updatedTask.listId,
+            },
+          });
+          break;
+
+        default:
+          this.logger.log(`No logging for the key: ${key}`);
+          break;
       }
     }
 
@@ -163,10 +182,20 @@ export class TaskService {
     return task;
   }
 
-  remove(id: string) {
-    const task = this.prisma.task.delete({
+  async remove(id: string) {
+    const task = await this.prisma.task.delete({
       where: { id },
     });
+    const activityLog = await this.prisma.activityLog.create({
+      data: {
+        entityType: 'TASK',
+        action: 'DELETE',
+        taskId: id,
+        authorId: task.authorId,
+      },
+    });
+    this.logger.log('Deleting task');
+    console.log({ task, activityLog });
 
     return task;
   }
