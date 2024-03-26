@@ -5,7 +5,7 @@ CREATE TYPE "STATUS" AS ENUM ('IN_PROGRESS', 'COMPLETED', 'DELETED');
 CREATE TYPE "PRIORITY" AS ENUM ('LOW', 'MEDIUM', 'HIGH');
 
 -- CreateEnum
-CREATE TYPE "ACTION" AS ENUM ('CREATE', 'RENAME', 'ADD_DESCRIPTION', 'CHANGE_DESCRIPTION', 'CHANGE_STATUS', 'CHANGE_PRIORITY', 'ADD_DUE_DATE', 'CHANGE_DUE_DATE', 'DELETE');
+CREATE TYPE "ACTION" AS ENUM ('CREATE', 'RENAME', 'MOVE', 'ADD_DESCRIPTION', 'CHANGE_DESCRIPTION', 'CHANGE_STATUS', 'CHANGE_PRIORITY', 'ADD_DUE_DATE', 'CHANGE_DUE_DATE', 'DELETE');
 
 -- CreateEnum
 CREATE TYPE "ENTITY_TYPE" AS ENUM ('LIST', 'TASK');
@@ -13,8 +13,8 @@ CREATE TYPE "ENTITY_TYPE" AS ENUM ('LIST', 'TASK');
 -- CreateTable
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
+    "username" TEXT NOT NULL,
     "email" TEXT NOT NULL,
-    "name" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -25,8 +25,8 @@ CREATE TABLE "User" (
 CREATE TABLE "List" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
-    "order" INTEGER NOT NULL,
-    "userId" TEXT NOT NULL,
+    "order" INTEGER NOT NULL DEFAULT 0,
+    "authorId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -41,8 +41,8 @@ CREATE TABLE "Task" (
     "status" "STATUS" NOT NULL DEFAULT 'IN_PROGRESS',
     "priority" "PRIORITY" NOT NULL DEFAULT 'MEDIUM',
     "dueDate" TIMESTAMP(3),
-    "order" INTEGER NOT NULL,
-    "userId" TEXT NOT NULL,
+    "order" INTEGER NOT NULL DEFAULT 0,
+    "authorId" TEXT NOT NULL,
     "listId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -53,16 +53,20 @@ CREATE TABLE "Task" (
 -- CreateTable
 CREATE TABLE "ActivityLog" (
     "id" TEXT NOT NULL,
-    "action" "ACTION" NOT NULL,
     "entityType" "ENTITY_TYPE" NOT NULL,
-    "entityId" TEXT NOT NULL,
-    "entityTitle" TEXT NOT NULL,
-    "userId" TEXT NOT NULL,
+    "action" "ACTION" NOT NULL,
+    "prevValue" TEXT,
+    "newValue" TEXT,
+    "authorId" TEXT NOT NULL,
+    "taskId" TEXT,
+    "listId" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "ActivityLog_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
@@ -71,16 +75,31 @@ CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 CREATE UNIQUE INDEX "List_title_key" ON "List"("title");
 
 -- CreateIndex
-CREATE INDEX "List_userId_idx" ON "List"("userId");
+CREATE INDEX "List_authorId_idx" ON "List"("authorId");
 
 -- CreateIndex
-CREATE INDEX "Task_userId_listId_idx" ON "Task"("userId", "listId");
+CREATE INDEX "Task_authorId_listId_idx" ON "Task"("authorId", "listId");
+
+-- CreateIndex
+CREATE INDEX "ActivityLog_authorId_taskId_idx" ON "ActivityLog"("authorId", "taskId");
+
+-- CreateIndex
+CREATE INDEX "ActivityLog_authorId_listId_idx" ON "ActivityLog"("authorId", "listId");
 
 -- AddForeignKey
-ALTER TABLE "List" ADD CONSTRAINT "List_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "List" ADD CONSTRAINT "List_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Task" ADD CONSTRAINT "Task_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Task" ADD CONSTRAINT "Task_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Task" ADD CONSTRAINT "Task_listId_fkey" FOREIGN KEY ("listId") REFERENCES "List"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ActivityLog" ADD CONSTRAINT "ActivityLog_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ActivityLog" ADD CONSTRAINT "ActivityLog_taskId_fkey" FOREIGN KEY ("taskId") REFERENCES "Task"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ActivityLog" ADD CONSTRAINT "ActivityLog_listId_fkey" FOREIGN KEY ("listId") REFERENCES "List"("id") ON DELETE SET NULL ON UPDATE CASCADE;

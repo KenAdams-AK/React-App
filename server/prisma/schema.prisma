@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider      = "prisma-client-js"
   binaryTargets = ["native", "debian-openssl-3.0.x"]
@@ -15,12 +9,13 @@ datasource db {
 }
 
 model User {
-  id    String  @id @default(uuid())
-  email String  @unique
-  name  String?
+  id       String @id @default(uuid())
+  username String @unique
+  email    String @unique
 
-  lists List[]
-  tasks Task[]
+  lists       List[]
+  tasks       Task[]
+  activityLog ActivityLog[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -29,16 +24,17 @@ model User {
 model List {
   id    String @id @default(uuid())
   title String @unique
-  order Int
+  order Int    @default(0)
 
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
-  tasks  Task[]
+  authorId    String
+  author      User          @relation(fields: [authorId], references: [id])
+  tasks       Task[]
+  activityLog ActivityLog[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([userId])
+  @@index([authorId])
 }
 
 enum STATUS {
@@ -60,22 +56,24 @@ model Task {
   status      STATUS    @default(IN_PROGRESS)
   priority    PRIORITY  @default(MEDIUM)
   dueDate     DateTime?
-  order       Int
+  order       Int       @default(0)
 
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  listId String
-  list   List   @relation(fields: [listId], references: [id], onDelete: Cascade)
+  authorId    String
+  author      User          @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  listId      String
+  list        List          @relation(fields: [listId], references: [id], onDelete: Cascade)
+  activityLog ActivityLog[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([userId, listId])
+  @@index([authorId, listId])
 }
 
 enum ACTION {
   CREATE
   RENAME
+  MOVE
   ADD_DESCRIPTION
   CHANGE_DESCRIPTION
   CHANGE_STATUS
@@ -91,13 +89,21 @@ enum ENTITY_TYPE {
 }
 
 model ActivityLog {
-  id          String      @id @default(uuid())
-  action      ACTION
-  entityType  ENTITY_TYPE
-  entityId    String
-  entityTitle String
-  userId      String
+  id         String      @id @default(uuid())
+  entityType ENTITY_TYPE
+  action     ACTION
+  prevValue  String?
+  newValue   String?
+
+  authorId String
+  author   User    @relation(fields: [authorId], references: [id])
+  taskId   String?
+  task     Task?   @relation(fields: [taskId], references: [id])
+  listId   String?
+  list     List?   @relation(fields: [listId], references: [id])
 
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+
+  @@index([authorId, taskId])
+  @@index([authorId, listId])
 }
