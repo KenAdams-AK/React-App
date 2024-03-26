@@ -1,10 +1,14 @@
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 
+import { activityLogReducer } from "./reducers/activityLog/activityLogSlice";
+import { taskListReducer } from "./reducers/taskLists/taskListsSlice";
 import { userReducer } from "./reducers/user/userSlice";
 
 const rootReducer = combineReducers({
   user: userReducer,
+  activityLog: activityLogReducer,
+  taskLists: taskListReducer,
 });
 
 export function createReduxStore(initialState = {}) {

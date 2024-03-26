@@ -28,22 +28,22 @@ export class TaskListService {
     return list;
   }
 
-  findAll() {
-    const lists = this.prisma.list.findMany({
+  async findAll() {
+    const lists = await this.prisma.list.findMany({
       orderBy: [{ order: 'asc' }, { createdAt: 'desc' }],
       include: {
         tasks: {
           orderBy: [{ order: 'asc' }, { createdAt: 'desc' }],
-          select: {
-            id: true,
-            title: true,
-            description: true,
-            priority: true,
-            dueDate: true,
-            order: true,
-            createdAt: true,
-            updatedAt: true,
-          },
+          // select: {
+          //   id: true,
+          //   title: true,
+          //   description: true,
+          //   priority: true,
+          //   dueDate: true,
+          //   order: true,
+          //   createdAt: true,
+          //   updatedAt: true,
+          // },
         },
       },
     });

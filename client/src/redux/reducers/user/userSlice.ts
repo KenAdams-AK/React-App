@@ -2,8 +2,9 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import { ActionReducerMapBuilder } from "@reduxjs/toolkit/react";
 import { UserResponse } from "@contracts/index";
-import { actionTypes } from "../../actionTypes";
-import { apiRoutes } from "../../apiRoutes";
+import { actionTypes } from "@/redux/actionTypes";
+import { apiRoutes } from "@/redux/apiRoutes";
+import axios from "axios";
 
 type InitialState = {
   user: Nullable<UserResponse>;
@@ -13,26 +14,25 @@ const initialState: InitialState = {
   user: null,
 };
 
-const fetchUserThunk = createAsyncThunk<UserResponse>(
+const fetchUser = createAsyncThunk<UserResponse>(
   actionTypes.fetchUser,
   async (_args, { signal }) => {
-    const res = await fetch(apiRoutes.fetchUser, { signal });
-
-    return res.json();
+    const { data } = await axios(apiRoutes.fetchUser, { signal });
+    return data;
   }
 );
 
 const extraReducers = (builder: ActionReducerMapBuilder<InitialState>) => {
-  builder.addCase(fetchUserThunk.fulfilled, (state, action) => {
-    state.user = action.payload;
+  builder.addCase(fetchUser.fulfilled, (state, { payload }) => {
+    state.user = payload;
   });
 
-  builder.addCase(fetchUserThunk.rejected, (_state, { error }) => {
+  builder.addCase(fetchUser.rejected, (_state, { error }) => {
     if (error.name === "AbortError") {
-      console.warn("[FETCH_USER]", error.message);
+      console.warn("[FETCH_USER]", error);
       return;
     }
-    console.error("[FETCH_USER]", error.message);
+    console.error("[FETCH_USER]", error);
   });
 };
 
@@ -45,4 +45,4 @@ const userSlice = createSlice({
 
 const userReducer = userSlice.reducer;
 
-export { userReducer, fetchUserThunk };
+export { userReducer, fetchUser };

@@ -1,9 +1,13 @@
 export const actionTypes = {
   fetchUser: "user/fetchUser",
+  fetchActivityLog: "activity/fetchActivityLog",
+
+  fetchTaskList: "taskList/fetchTaskList",
+  postTaskList: "taskList/postTaskList",
+  patchTaskList: "taskList/patchTaskList",
+  deleteTaskList: "taskList/deleteTaskList",
+
+  postTask: "task/postTask",
+  patchTask: "task/patchTask",
+  deleteTask: "task/deleteTask",
 } as const;
-
-// type Keys = typeof actionTypes;
-// type Values = (typeof actionTypes)[keyof Keys];
-// export type ActionTypes = Values;
-
-export type ActionTypes = typeof actionTypes;
