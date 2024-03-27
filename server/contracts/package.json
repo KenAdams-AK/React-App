@@ -1,0 +1,15 @@
+{
+  "name": "task-board-app-contracts",
+  "version": "0.0.1",
+  "description": "",
+  "keywords": [],
+  "author": "KenAdams-AK",
+  "license": "ISC",
+  "main": "./build/index.js",
+  "scripts": {
+    "prepublish": "rm -rf build && tsc"
+  },
+  "dependencies": {
+    "zod": "^3.22.4"
+  }
+}
