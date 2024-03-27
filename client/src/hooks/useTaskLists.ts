@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 
-import { TaskListResponse } from "@contracts/index";
+import { TaskListResponse } from "task-board-app-contracts";
 import { fetchTaskLists } from "@/redux/reducers/taskLists/taskListsThunks";
 import { useEffect } from "react";
 

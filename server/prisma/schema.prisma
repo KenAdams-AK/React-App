@@ -95,6 +95,7 @@ model ActivityLog {
   prevValue  String?
   newValue   String?
 
+  // TODO: Add ondelete cascade
   authorId String
   author   User    @relation(fields: [authorId], references: [id])
   taskId   String?

@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import { ActionReducerMapBuilder } from "@reduxjs/toolkit/react";
-import { UserResponse } from "@contracts/index";
+import { UserResponse } from "task-board-app-contracts";
 import { actionTypes } from "@/redux/actionTypes";
 import { apiRoutes } from "@/redux/apiRoutes";
 import axios from "axios";

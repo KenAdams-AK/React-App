@@ -1,4 +1,4 @@
-import { TaskResponse } from "@contracts/commands";
+import { TaskResponse } from "task-board-app-contracts";
 import { createSlice } from "@reduxjs/toolkit";
 import { extraReducers } from "./tasksExtraReducers";
 

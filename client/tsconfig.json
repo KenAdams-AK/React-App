@@ -23,8 +23,8 @@
     /* Paths */
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "@contracts/*": ["../server/contracts/*"]
+      "@/*": ["./src/*"]
+      // "@contracts/*": ["../server/contracts/*"]
     }
   },
   "include": ["src", "type.d.ts"],

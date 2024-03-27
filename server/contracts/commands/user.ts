@@ -15,4 +15,4 @@ const UserResponseSchema = z.object({
 
 type UserResponse = z.infer<typeof UserResponseSchema>;
 
-export { UserResponseSchema, UserResponse };
+export { UserResponseSchema, type UserResponse };
