@@ -36,7 +36,7 @@ export {
   CreateTaskListRequestSchema,
   UpdateTaskListRequestSchema,
   TaskListResponseSchema,
-  CreateTaskListRequest,
-  UpdateTaskListRequest,
-  TaskListResponse,
+  type CreateTaskListRequest,
+  type UpdateTaskListRequest,
+  type TaskListResponse,
 };

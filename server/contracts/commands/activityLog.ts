@@ -46,6 +46,6 @@ type ActivityLogResponse = z.infer<typeof ActivityLogResponseSchema>;
 export {
   CreateActivityLogSchema,
   ActivityLogResponseSchema,
-  CreateActivityLog,
-  ActivityLogResponse,
+  type CreateActivityLog,
+  type ActivityLogResponse,
 };

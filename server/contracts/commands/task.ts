@@ -53,7 +53,7 @@ export {
   CreateTaskRequestSchema,
   UpdateTaskRequestSchema,
   TaskResponseSchema,
-  CreateTaskRequest,
-  UpdateTaskRequest,
-  TaskResponse,
+  type CreateTaskRequest,
+  type UpdateTaskRequest,
+  type TaskResponse,
 };
