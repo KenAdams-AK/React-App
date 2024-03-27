@@ -4,7 +4,7 @@ import {
   createSlice,
 } from "@reduxjs/toolkit";
 
-import { ActivityLogResponse } from "@contracts/index";
+import { ActivityLogResponse } from "task-board-app-contracts";
 import { actionTypes } from "@/redux/actionTypes";
 import { apiRoutes } from "@/redux/apiRoutes";
 import axios from "axios";

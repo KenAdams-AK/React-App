@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 
-import { UserResponse } from "@contracts/commands";
+import { UserResponse } from "task-board-app-contracts";
 import { fetchUser } from "@/redux/reducers/user/userSlice";
 import { useEffect } from "react";
 

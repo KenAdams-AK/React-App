@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 
-import { ActivityLogResponse } from "@contracts/commands";
+import { ActivityLogResponse } from "task-board-app-contracts";
 import { fetchActivityLog } from "@/redux/reducers/activityLog/activityLogSlice";
 import { useEffect } from "react";
 

@@ -1,4 +1,4 @@
-import { TaskListResponse } from "@contracts/index";
+import { TaskListResponse } from "task-board-app-contracts";
 import { createSlice } from "@reduxjs/toolkit";
 import { extraReducers } from "./taskListExtraReducers";
 

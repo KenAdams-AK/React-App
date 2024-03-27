@@ -2,7 +2,7 @@ import {
   CreateTaskListRequest,
   TaskListResponse,
   UpdateTaskListRequest,
-} from "@contracts/index";
+} from "task-board-app-contracts";
 
 import { actionTypes } from "@/redux/actionTypes";
 import { apiRoutes } from "@/redux/apiRoutes";
