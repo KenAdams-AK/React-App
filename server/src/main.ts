@@ -10,7 +10,10 @@ async function bootstrap() {
     bufferLogs: true,
   });
   app.enableCors({
-    origin: ['https://react-app-task-board.netlify.app/'],
+    origin: [
+      'https://react-app-task-board.netlify.app',
+      'https://react-app-task-board.netlify.app/',
+    ],
   });
 
   // Configure a Swagger
