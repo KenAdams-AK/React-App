@@ -34,16 +34,16 @@ export class TaskListService {
       include: {
         tasks: {
           orderBy: [{ order: 'asc' }, { createdAt: 'desc' }],
-          select: {
-            id: true,
-            title: true,
-            description: true,
-            priority: true,
-            dueDate: true,
-            order: true,
-            createdAt: true,
-            updatedAt: true,
-          },
+          // select: {
+          //   id: true,
+          //   title: true,
+          //   description: true,
+          //   priority: true,
+          //   dueDate: true,
+          //   order: true,
+          //   createdAt: true,
+          //   updatedAt: true,
+          // },
         },
       },
     });
