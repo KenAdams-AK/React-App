@@ -1,4 +1,5 @@
 import { ActivityLog } from "./components/ActivityLog";
+import { Button } from "./components/ui/button";
 import { TaskList } from "./components/TaskList";
 import { useUser } from "./hooks/useUser";
 
@@ -10,8 +11,11 @@ function App() {
   }
 
   return (
-    <main>
-      <h1>Welcome to Task Board, {user.username}!</h1>
+    <main className="p-1 text-center">
+      <h1 className="text-3xl font-bold text-red-500">
+        Welcome to Task Board, {user.username}!
+      </h1>
+      <Button>Click me</Button>
       <ActivityLog />
       <TaskList />
     </main>
