@@ -18,8 +18,15 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+
+    /* Paths */
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+      // "@contracts/*": ["../server/contracts/*"]
+    }
   },
-  "include": ["src"],
+  "include": ["src", "type.d.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
