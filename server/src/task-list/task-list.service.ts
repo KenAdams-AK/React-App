@@ -28,8 +28,8 @@ export class TaskListService {
     return list;
   }
 
-  findAll() {
-    const lists = this.prisma.list.findMany({
+  async findAll() {
+    const lists = await this.prisma.list.findMany({
       orderBy: [{ order: 'asc' }, { createdAt: 'desc' }],
       include: {
         tasks: {
