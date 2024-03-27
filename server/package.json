@@ -11,6 +11,7 @@
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
+    "start:prod:host": "nest start && prisma migrate deploy",
     "db:up": "docker-compose up -d",
     "db:down": "docker-compose down",
     "db:init": "npm run db:up && sleep 1 && npm run prisma:migrate",
