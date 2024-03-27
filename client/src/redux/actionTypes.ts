@@ -7,6 +7,7 @@ export const actionTypes = {
   patchTaskList: "taskList/patchTaskList",
   deleteTaskList: "taskList/deleteTaskList",
 
+  fetchTaskById: "task/fetchTaskById",
   postTask: "task/postTask",
   patchTask: "task/patchTask",
   deleteTask: "task/deleteTask",

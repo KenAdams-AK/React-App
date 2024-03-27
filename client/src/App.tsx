@@ -11,8 +11,8 @@ function App() {
   }
 
   return (
-    <main className="p-1 text-center">
-      <h1 className="text-3xl font-bold text-red-500">
+    <main className="p-1 space-y-5 text-center">
+      <h1 className="text-3xl font-bold text-sky-500">
         Welcome to Task Board, {user.username}!
       </h1>
       <Button>Click me</Button>

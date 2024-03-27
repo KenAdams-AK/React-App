@@ -2,6 +2,7 @@ import { ActionReducerMapBuilder } from "@reduxjs/toolkit";
 import { InitialState } from "./taskListsSlice";
 import { fetchTaskLists } from "./taskListsThunks";
 
+// TODO: Add cases for postTaskList, patchTaskList, and deleteTaskList
 const extraReducers = (builder: ActionReducerMapBuilder<InitialState>) => {
   builder.addCase(fetchTaskLists.pending, (state) => {
     state.isLoading = true;

@@ -10,6 +10,7 @@ export const apiRoutes = {
   patchTaskList: (id: string) => `${BASE_URL}/api/task-lists/${id}`,
   deleteTaskList: (id: string) => `${BASE_URL}/api/task-lists/${id}`,
 
+  fetchTaskById: (id: string) => `${BASE_URL}/api/tasks/${id}`,
   postTask: `${BASE_URL}/api/tasks`,
   patchTask: (id: string) => `${BASE_URL}/api/tasks/${id}`,
   deleteTask: (id: string) => `${BASE_URL}/api/tasks/${id}`,

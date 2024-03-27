@@ -1,7 +1,7 @@
 import {
-  CreateTaskListRequest,
-  TaskListResponse,
-  UpdateTaskListRequest,
+  CreateTaskRequest,
+  TaskResponse,
+  UpdateTaskRequest,
 } from "@contracts/index";
 
 import { actionTypes } from "@/redux/actionTypes";
@@ -9,11 +9,11 @@ import { apiRoutes } from "@/redux/apiRoutes";
 import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-const fetchTaskLists = createAsyncThunk<TaskListResponse[]>(
-  actionTypes.fetchTaskList,
-  async (_args, { signal }) => {
+const fetchTaskById = createAsyncThunk<TaskResponse, string>(
+  actionTypes.fetchTaskById,
+  async (id, { signal }) => {
     const options = {
-      url: apiRoutes.fetchTaskLists,
+      url: apiRoutes.fetchTaskById(id),
       method: "GET",
       signal,
     };
@@ -23,11 +23,11 @@ const fetchTaskLists = createAsyncThunk<TaskListResponse[]>(
   }
 );
 
-const postTaskList = createAsyncThunk<TaskListResponse, CreateTaskListRequest>(
-  actionTypes.postTaskList,
+const postTask = createAsyncThunk<TaskResponse, CreateTaskRequest>(
+  actionTypes.postTask,
   async (body, { signal }) => {
     const options = {
-      url: apiRoutes.postTaskList,
+      url: apiRoutes.postTask,
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -42,12 +42,12 @@ const postTaskList = createAsyncThunk<TaskListResponse, CreateTaskListRequest>(
   }
 );
 
-const patchTaskList = createAsyncThunk<
-  TaskListResponse,
-  { id: string; body: UpdateTaskListRequest }
->(actionTypes.patchTaskList, async ({ id, body }, { signal }) => {
+const patchTask = createAsyncThunk<
+  TaskResponse,
+  { id: string; body: UpdateTaskRequest }
+>(actionTypes.patchTask, async ({ id, body }, { signal }) => {
   const options = {
-    url: apiRoutes.patchTaskList(id),
+    url: apiRoutes.patchTask(id),
     method: "PATCH",
     headers: {
       Accept: "application/json",
@@ -61,11 +61,11 @@ const patchTaskList = createAsyncThunk<
   return data;
 });
 
-const deleteTaskList = createAsyncThunk<TaskListResponse, string>(
-  actionTypes.deleteTaskList,
+const deleteTask = createAsyncThunk<TaskResponse, string>(
+  actionTypes.deleteTask,
   async (id, { signal }) => {
     const options = {
-      url: apiRoutes.deleteTaskList(id),
+      url: apiRoutes.deleteTask(id),
       method: "DELETE",
       signal,
     };
@@ -75,4 +75,4 @@ const deleteTaskList = createAsyncThunk<TaskListResponse, string>(
   }
 );
 
-export { fetchTaskLists, postTaskList, patchTaskList, deleteTaskList };
+export { fetchTaskById, postTask, patchTask, deleteTask };
