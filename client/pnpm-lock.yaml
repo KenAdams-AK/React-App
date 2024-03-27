@@ -39,8 +39,8 @@ dependencies:
     specifier: ^1.0.7
     version: 1.0.7(tailwindcss@3.4.2)
   task-board-app-contracts:
-    specifier: ^0.0.1
-    version: 0.0.1
+    specifier: ^0.0.2
+    version: 0.0.2
 
 devDependencies:
   '@types/node':
@@ -2379,8 +2379,8 @@ packages:
     transitivePeerDependencies:
       - ts-node
 
-  /task-board-app-contracts@0.0.1:
-    resolution: {integrity: sha512-2d/j8ohCUkgy1m06emxOlys+taoQeJ3vTMcH17Z5QaJvz1eHVuwgkluM1Uf3HuExtcGRMpP+2N8EYEFLUhIaXg==}
+  /task-board-app-contracts@0.0.2:
+    resolution: {integrity: sha512-KGXjONujBxVSyQxbxpEhGYLwyfxRtL9VXlnmwyYotF9Mwc9TI62pO82dsi7tDod03n87ohfOJa/DhEao4wih0Q==}
     dependencies:
       zod: 3.22.4
     dev: false

@@ -1,20 +1,22 @@
-import { Prisma } from '@prisma/client';
-import { z } from 'zod';
 import { TaskResponseSchema } from './task';
+// import { Prisma } from '@prisma/client';
+import { z } from 'zod';
 
 const CreateTaskListRequestSchema = z
   .object({
     title: z.string().min(5).max(255),
     authorId: z.string(),
   })
-  .strict() satisfies z.Schema<Prisma.ListUncheckedCreateInput>;
+  .strict();
+// satisfies z.Schema<Prisma.ListUncheckedCreateInput>;
 
 const UpdateTaskListRequestSchema = z
   .object({
     title: z.string().min(5).max(255),
     authorId: z.string(),
   })
-  .strict() satisfies z.Schema<Prisma.ListUncheckedUpdateInput>;
+  .strict();
+// satisfies z.Schema<Prisma.ListUncheckedUpdateInput>;
 
 const TaskListResponseSchema = z.object({
   id: z.string(),
