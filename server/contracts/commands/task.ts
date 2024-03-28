@@ -1,5 +1,5 @@
 import { ActivityLogResponseSchema } from './activityLog';
-// import { Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { z } from 'zod';
 
 const STATUS = ['IN_PROGRESS', 'COMPLETED', 'DELETED'] as const;
@@ -15,8 +15,7 @@ const CreateTaskRequestSchema = z
     authorId: z.string(),
     listId: z.string(),
   })
-  .strict();
-// satisfies z.Schema<Prisma.TaskUncheckedCreateInput>;
+  .strict() satisfies z.Schema<Prisma.TaskUncheckedCreateInput>;
 
 const UpdateTaskRequestSchema = z
   .object({
@@ -28,8 +27,7 @@ const UpdateTaskRequestSchema = z
     authorId: z.string(),
     listId: z.string(),
   })
-  .strict();
-// satisfies z.Schema<Prisma.TaskUncheckedUpdateInput>;
+  .strict() satisfies z.Schema<Prisma.TaskUncheckedUpdateInput>;
 
 const TaskResponseSchema = z.object({
   id: z.string(),
