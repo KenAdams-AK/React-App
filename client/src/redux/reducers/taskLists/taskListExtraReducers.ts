@@ -12,6 +12,7 @@ const extraReducers = (builder: ActionReducerMapBuilder<InitialState>) => {
   builder.addCase(fetchTaskLists.fulfilled, (state, { payload }) => {
     state.isLoading = false;
     state.taskLists = payload;
+    state.listTitles = payload.map((list) => list.title);
   });
 
   builder.addCase(fetchTaskLists.rejected, (state, { error }) => {

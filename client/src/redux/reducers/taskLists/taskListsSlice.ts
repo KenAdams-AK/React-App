@@ -6,12 +6,14 @@ export type InitialState = {
   isLoading: boolean;
   error: Nullable<string>;
   taskLists: Nullable<TaskListResponse[]>;
+  listTitles: Nullable<string[]>;
 };
 
 const initialState: InitialState = {
   isLoading: false,
   error: null,
   taskLists: null,
+  listTitles: null,
 };
 
 const taskListSlice = createSlice({

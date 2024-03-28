@@ -3,12 +3,14 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 
 import { activityLogReducer } from "./reducers/activityLog/activityLogSlice";
 import { taskListReducer } from "./reducers/taskLists/taskListsSlice";
+import { taskReducer } from "./reducers/tasks/tasksSlice";
 import { userReducer } from "./reducers/user/userSlice";
 
 const rootReducer = combineReducers({
   user: userReducer,
   activityLog: activityLogReducer,
   taskLists: taskListReducer,
+  task: taskReducer,
 });
 
 export function createReduxStore(initialState = {}) {

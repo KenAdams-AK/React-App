@@ -1,4 +1,4 @@
-// import { Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { z } from 'zod';
 
 const ACTION = [
@@ -25,8 +25,7 @@ const CreateActivityLogSchema = z
     taskId: z.string().optional(),
     listId: z.string().optional(),
   })
-  .strict();
-// satisfies z.Schema<Prisma.ActivityLogUncheckedCreateInput>;
+  .strict() satisfies z.Schema<Prisma.ActivityLogUncheckedCreateInput>;
 
 const ActivityLogResponseSchema = z.object({
   id: z.string(),
